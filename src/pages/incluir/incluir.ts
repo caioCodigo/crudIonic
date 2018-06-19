@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, TabHighlight } from 'ionic-angular';
+import { Component, Input } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController, TabHighlight, Img } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as $ from 'jquery';
+import { Base64 } from '@ionic-native/base64';
+import { Observable } from 'rxjs/Observable';
+
 
 /**
  * Generated class for the IncluirPage page.
@@ -23,6 +25,7 @@ export class IncluirPage {
   public login:any;
   public endereco:any;
   public senha:any;
+  public b64:any;
   public isEdited:boolean = false;
   public hideForm:boolean = false;
   public pageTitle:string;
@@ -31,7 +34,7 @@ export class IncluirPage {
 
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http:HttpClient, public fb:FormBuilder, public toastCtrl:ToastController){
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http:HttpClient, public fb:FormBuilder, public toastCtrl:ToastController, public base64:Base64){
 
     this.form = fb.group({
       "id": ["",Validators.required],
@@ -65,11 +68,10 @@ export class IncluirPage {
       this.endereco = item.endereco_usu;
    }
 
-   createEntry(recordID:any, login : string, senha:string, nome : string, endereco:string) : void
-   {
-     
+   createEntry(recordID:any, login : string, senha:string, nome : string, endereco:string,imagem:string) : void
+   {  
       let headers 	: any		= new HttpHeaders ({ 'Content-Type': 'application/json' }),
-          options 	: any		= { "key" : "create", "id" : recordID, "login" : login, "senha":senha, "nome":nome,"endereco":endereco },
+          options 	: any		= { "key" : "create", "id" : recordID, "login" : login, "senha":senha, "nome":nome,"endereco":endereco, "imagem":imagem },
           url       : any   = this.baseURI;
 
     this.http.post(url, JSON.stringify(options), headers)
@@ -88,10 +90,10 @@ export class IncluirPage {
    }
 
 
-   updateEntry(recordID:any, login : string, senha:string, nome : string, endereco:string) : void
+   updateEntry(recordID:any, login : string, senha:string, nome : string, endereco:string, imagem:string) : void
    {
       let headers : any		= new HttpHeaders ({ 'Content-Type': 'application/json' }),
-      options 	  : any		= { "key" : "update", "id" : recordID, "login" : login, "senha":senha, "nome":nome, "endereco":endereco},
+      options 	  : any		= { "key" : "update", "id" : recordID, "login" : login, "senha":senha, "nome":nome, "endereco":endereco, "imagem":imagem },
       url         : any   = this.baseURI;
 
       this.http.post(url, JSON.stringify(options), headers)
@@ -103,12 +105,10 @@ export class IncluirPage {
       },
       (error : any) =>
       {
+         console.log(error);    
          this.sendNotification('Something went wrong!');
       });
    }
-
-
-
 
 
    deleteEntry() : void
@@ -133,22 +133,41 @@ export class IncluirPage {
 
    saveEntry() : void
    {
-      let id         : string = this.form.controls["id"].value,
-          login      : string    = this.form.controls["login"].value,
-          senha      : string    = this.form.controls["senha"].value,
-          nome       : string    = this.form.controls["nome"].value,
-          endereco   : string    = this.form.controls["endereco"].value;
+
+    
+
+    this.formatarImagem().subscribe((img)=>{
+
+      
+
+      let id      : string = this.form.controls["id"].value,
+          login   : string = this.form.controls["login"].value,
+          senha   : string = this.form.controls["senha"].value,
+          nome    : string = this.form.controls["nome"].value,
+          endereco: string = this.form.controls["endereco"].value,
+          imagem  : string =  img;
+
+          console.log(img);
+          
+
+
 
       if(this.isEdited)
       {
-         this.updateEntry(id,login,senha,nome,endereco);
+         this.updateEntry(id,login,senha,nome,endereco,imagem);
          
       }
       else
       {
-         this.createEntry(id,login,senha,nome,endereco);
+         this.createEntry(id,login,senha,nome,endereco,imagem);
       }
+    });
    }
+
+
+
+
+   
 
    resetFields() : void
    {
@@ -158,7 +177,7 @@ export class IncluirPage {
       this.nome     = "";
       this.endereco = "";
    }
-   sendNotification(message : string)  : void
+   sendNotification(message : string) : void
    {
       let notification = this.toastCtrl.create({
           message       : message,
@@ -167,7 +186,26 @@ export class IncluirPage {
       notification.present();
    }
 
+
+
+
    formatarImagem(){
-     
-   }
+    
+    let inputHTML:any = document.getElementById("files");
+
+    let arquivos = inputHTML.files[0];
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(arquivos);
+
+    return Observable.create(observer =>{
+      reader.onload = () =>{
+        observer.next(reader.result);
+        observer.complete();
+      };
+    });
+
+  }
+
 }

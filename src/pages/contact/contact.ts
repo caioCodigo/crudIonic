@@ -25,6 +25,8 @@ export class ContactPage {
      
 
       this.items = data;
+
+      
       
       console.log(data);
 

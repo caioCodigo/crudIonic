@@ -53,7 +53,7 @@
  
                 
                     <ion-item-group>
-                       <ion-item-divider color="light">login :</ion-item-divider>
+                       <ion-item-divider color="light">Login :</ion-item-divider>
                        <ion-item>
                           <ion-input
                              type="text"
@@ -65,7 +65,7 @@
 
                     
                         <ion-item-group>
-                           <ion-item-divider color="light">senha :</ion-item-divider>
+                           <ion-item-divider color="light">Senha :</ion-item-divider>
                            <ion-item>
                               <ion-input
                                  type="text"
@@ -77,7 +77,7 @@
 
                        
                             <ion-item-group>
-                               <ion-item-divider color="light">nome :</ion-item-divider>
+                               <ion-item-divider color="light">Nome :</ion-item-divider>
                                <ion-item>
                                   <ion-input
                                      type="text"
@@ -100,13 +100,9 @@
                                    </ion-item>
                                 </ion-item-group>
 
-                                <ion-item-group>
-                                   <ion-item-divider color="light">imagem :</ion-item-divider>
-                                   <ion-item>
-                                      <ion-input type="file"></ion-input>
-                                   </ion-item>
-                                </ion-item-group>
- 
+                                <input type="file" id="files" name="files">
+
+
                             <ion-item>
                               <button
                                   ion-button
@@ -115,8 +111,9 @@
                                   block
                                   [disabled]="!form.valid">Save Entry</button>
                             </ion-item>
+
              </ion-list>
-          </form>
+          </form>              
        </div>
     </div>
  

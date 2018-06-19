@@ -7,8 +7,8 @@
 </ion-header>
 
 <ion-content>
-    <ion-card *ngFor="let item of items">
-        <!-- <img src={{item.imagem_usu}}/> -->
+    <ion-card class="cartao" *ngFor="let item of items">
+        <img src={{item.imagem_usu}}/>
         <ion-card-content>
           <ion-card-title>
             {{item.login_usu}}
@@ -25,6 +25,7 @@
           ion-button
           color="primary"
           item-right
+          block
           (click)="viewEntry({ record: item })">detalhes</button>
 
         </ion-card-content>
