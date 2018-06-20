@@ -25,6 +25,7 @@ export class IncluirPage {
   public login:any;
   public endereco:any;
   public senha:any;
+  public usuario:any;
   public b64:any;
   public isEdited:boolean = false;
   public hideForm:boolean = false;
@@ -41,7 +42,8 @@ export class IncluirPage {
       "login": ["",Validators.required],
       "senha": ["",Validators.required],
       "nome": ["",Validators.required],
-      "endereco": ["",Validators.required]
+      "endereco": ["",Validators.required],
+      "tipoUsuario": ["",Validators.required]
     })
   }
 
@@ -66,12 +68,13 @@ export class IncluirPage {
       this.senha = item.senha_usu;
       this.nome = item.nome_usu;
       this.endereco = item.endereco_usu;
-   }
+      this.usuario = item.tipo_usu;
+  }
 
-   createEntry(recordID:any, login : string, senha:string, nome : string, endereco:string,imagem:string) : void
+  createEntry(recordID:any, login : string, senha:string, nome : string, endereco:string,imagem:string,usuario:any) : void
    {  
       let headers 	: any		= new HttpHeaders ({ 'Content-Type': 'application/json' }),
-          options 	: any		= { "key" : "create", "id" : recordID, "login" : login, "senha":senha, "nome":nome,"endereco":endereco, "imagem":imagem },
+          options 	: any		= { "key" : "create", "id" : recordID, "login" : login, "senha":senha, "nome":nome,"endereco":endereco, "imagem":imagem, "tipo":usuario },
           url       : any   = this.baseURI;
 
     this.http.post(url, JSON.stringify(options), headers)
@@ -79,7 +82,7 @@ export class IncluirPage {
       {
          // If the request was successful notify the user
          this.hideForm   = true;
-         this.sendNotification(`Congratulations the : ${login} was successfully added`);
+         this.sendNotification(`Congratulations the : ${login} was successfully added user type ${usuario}`);
       },
       (error : any) =>
       { 
@@ -87,13 +90,12 @@ export class IncluirPage {
          
          this.sendNotification('Something went wrong!');
       });
-   }
+  }
 
-
-   updateEntry(recordID:any, login : string, senha:string, nome : string, endereco:string, imagem:string) : void
-   {
+  updateEntry(recordID:any, login : string, senha:string, nome : string, endereco:string, imagem:string,usuario:any) : void
+  {
       let headers : any		= new HttpHeaders ({ 'Content-Type': 'application/json' }),
-      options 	  : any		= { "key" : "update", "id" : recordID, "login" : login, "senha":senha, "nome":nome, "endereco":endereco, "imagem":imagem },
+      options 	  : any		= { "key" : "update", "id" : recordID, "login" : login, "senha":senha, "nome":nome, "endereco":endereco, "imagem":imagem, "tipo":usuario },
       url         : any   = this.baseURI;
 
       this.http.post(url, JSON.stringify(options), headers)
@@ -101,17 +103,16 @@ export class IncluirPage {
       {
          // If the request was successful notify the user
          this.hideForm  =  true;
-         this.sendNotification(`Congratulations the technology: ${login} was successfully updated`);
+         this.sendNotification(`Congratulations the technology: ${login} was successfully updated user type ${usuario}`);
       },
       (error : any) =>
       {
          console.log(error);    
          this.sendNotification('Something went wrong!');
       });
-   }
+  }
 
-
-   deleteEntry() : void
+  deleteEntry() : void
    {
       let id        : string 	= this.form.controls["id"].value,
           headers 	: any		= new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -129,9 +130,9 @@ export class IncluirPage {
       {
          this.sendNotification('Something went wrong!');
       });
-   }
+  }
 
-   saveEntry() : void
+  saveEntry() : void
    {
 
     
@@ -145,51 +146,43 @@ export class IncluirPage {
           senha   : string = this.form.controls["senha"].value,
           nome    : string = this.form.controls["nome"].value,
           endereco: string = this.form.controls["endereco"].value,
-          imagem  : string =  img;
+          usuario : string = this.form.controls["tipoUsuario"].value,
+          imagem  : string =  img;          
 
-          console.log(img);
+          console.log(usuario);
           
-
-
 
       if(this.isEdited)
       {
-         this.updateEntry(id,login,senha,nome,endereco,imagem);
+         this.updateEntry(id,login,senha,nome,endereco,imagem,usuario);
          
       }
       else
       {
-         this.createEntry(id,login,senha,nome,endereco,imagem);
+         this.createEntry(id,login,senha,nome,endereco,imagem,usuario);
       }
     });
-   }
+  }
 
-
-
-
-   
-
-   resetFields() : void
+  resetFields() : void
    {
       this.recordID = "";
       this.login    = "";
       this.senha    = "";
       this.nome     = "";
       this.endereco = "";
-   }
-   sendNotification(message : string) : void
+  }
+
+  sendNotification(message : string) : void
    {
       let notification = this.toastCtrl.create({
           message       : message,
           duration      : 3000
       });
       notification.present();
-   }
-
-
-
-
-   formatarImagem(){
+  }
+  
+  formatarImagem(){
     
     let inputHTML:any = document.getElementById("files");
 

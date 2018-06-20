@@ -75,10 +75,24 @@
                            </ion-item>
                         </ion-item-group>
 
-                       
+                    <ion-item-group>    
+                        <ion-list>
+                            <ion-item-divider color="light">Tipo de usuário :</ion-item-divider>
+                                <ion-item>
+                                    <ion-label>Tipo</ion-label>
+                                    <ion-select [(ngModel)]="tipoUsuario"
+                                    formControlName="tipoUsuario">
+                                        <ion-option value="0">Cliente</ion-option>
+                                        <ion-option value="1">Admin</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                        </ion-list>
+                    </ion-item-group> 
+                        
+                        
                             <ion-item-group>
                                <ion-item-divider color="light">Nome :</ion-item-divider>
-                               <ion-item>
+                               <ion-item >
                                   <ion-input
                                      type="text"
                                      placeholder="nome"
@@ -99,6 +113,8 @@
                                          [(ngModel)]="endereco"></ion-input>
                                    </ion-item>
                                 </ion-item-group>
+
+                                <ion-item-divider color="light">Imagem :</ion-item-divider>
 
                                 <input type="file" id="files" name="files">
 

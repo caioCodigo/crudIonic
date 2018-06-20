@@ -10,22 +10,29 @@
     <ion-card class="cartao" *ngFor="let item of items">
         <img src={{item.imagem_usu}}/>
         <ion-card-content>
-          <ion-card-title>
+          <ion-card-title   [ngStyle]="{textDecoration: item.tipo_usu == 1 ? 'underline' : 'none' }">
             {{item.login_usu}}
             </ion-card-title>
 
           
-           <p><span>ID usuario: </span>{{item.id_usu}}</p>
+          <p><span>ID usuario: </span>{{item.id_usu}}</p>
 
           <p><span>Nome: </span>{{item.nome_usu}}</p>
 
           <p><span>Endereço: </span>{{item.endereco_usu}}</p>
 
+          <p><span  *ngIf="item.tipo_usu == 1">Administrador</span></p>
+
+          <p><span  *ngIf="item.tipo_usu == 0">Cliente</span></p>
+
+          <!-- nossa classe so sera ativada caso a sentença seja true -->
           <button
+          [ngClass]="{botao : item.tipo_usu == 1}"
           ion-button
           color="primary"
           item-right
           block
+          class="botao"
           (click)="viewEntry({ record: item })">detalhes</button>
 
         </ion-card-content>

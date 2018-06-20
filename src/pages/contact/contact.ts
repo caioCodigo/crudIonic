@@ -7,10 +7,13 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
-
+  public getUrl = window.location;
+  public baseUrl = this.getUrl.protocol + "//" + this.getUrl.host + "/" + this.getUrl.pathname.split('/')[1];
+  public urlFinal;
   public items : Array<any> = [];
 
   constructor(public navCtrl: NavController, public http:HttpClient) {
+   
 
   }
 
@@ -28,8 +31,6 @@ export class ContactPage {
 
       
       
-      console.log(data);
-
       return this.items;
       
     }
